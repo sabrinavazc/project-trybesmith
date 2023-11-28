@@ -1,4 +1,7 @@
-type ServiceResponseErrorType = 'INVALID_INPUT' | 'CONFLICT' | 'NOT_FOUND' | 'UNAUTHORIZED' | 'BAD_REQUEST' | 'CREATED' | 'SUCCESSFUL';
+type ServiceResponseErrorType = 'INVALID_INPUT' | 
+'CONFLICT' | 'NOT_FOUND' | 
+'UNAUTHORIZED' | 'BAD_REQUEST' 
+| 'CREATED' | 'SUCCESSFUL';
 
 export type ServiceResponseError = {
   status: ServiceResponseErrorType, 
