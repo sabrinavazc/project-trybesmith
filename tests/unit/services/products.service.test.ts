@@ -2,8 +2,6 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import ProductService from '../../../src/service/product.service';
 import ProductModel from '../../../src/database/models/product.model';
-import OrderModel from '../../../src/database/models/order.model';
-import validateParamsCreateProduct from '../../../src/utils/validate.response';
 
 describe('ProductsService', function () {
   beforeEach(function () { sinon.restore(); });
