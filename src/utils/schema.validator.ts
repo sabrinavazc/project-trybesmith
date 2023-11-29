@@ -1,6 +1,7 @@
 import { AnySchema } from 'joi';
 import { SchemaValidatorResponse } from '../types/SchemaValidatorResponse';
 
+
 const schemaValidator = (schema: AnySchema, data: Record<string, any>): SchemaValidatorResponse => {
   const { error } = schema.validate(data);
 

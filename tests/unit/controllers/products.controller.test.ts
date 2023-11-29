@@ -49,7 +49,7 @@ describe('ProductsController', function () {
   
     const httpResponse = await chai.request(app).post('/products').send(httpRequestBody);
   
-    expect(httpResponse.status).to.equal(422);
+    expect(httpResponse.status).to.equal(400);
     expect(httpResponse.body).to.deep.equal({ message: '\"name\" is required' });
   });
 
@@ -61,7 +61,7 @@ describe('ProductsController', function () {
 
     const httpResponse = await chai.request(app).post('/products').send(httpRequestBody);
 
-    expect(httpResponse.status).to.equal(422);
+    expect(httpResponse.status).to.equal(400);
     expect(httpResponse.body).to.deep.equal({ message: '\"name\" is required' });
   });
   
