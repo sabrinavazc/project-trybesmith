@@ -1,10 +1,12 @@
 import ProductModel, 
 { ProductInputtableTypes, 
   ProductSequelizeModel } from '../database/models/product.model';
-import { Product } from '../types/Product';
 import OrderModel from '../database/models/order.model';
+import { Product } from '../types/Product';
 import { ServiceResponse } from '../types/ServiceResponse';
-import validateParamsCreateProduct from '../utils/validate.response';
+import createProductSchema from '../schemas/product.schema';
+import schemaValidator from '../utils/schema.validator';
+import getError from '../utils/get.error';
 
 async function listProducts(): Promise<ServiceResponse<ProductSequelizeModel[]>> {
   const products = await ProductModel.findAll();
@@ -26,32 +28,25 @@ async function listProducts(): Promise<ServiceResponse<ProductSequelizeModel[]>>
 //     return serviceResponse; 
 // };
 
-async function createProduct(
-  product: ProductInputtableTypes,
-): Promise<ServiceResponse<Omit<Product, 'orderId'>>> {
-  let responseService: ServiceResponse<Omit<Product, 'orderId'>>;
-  
-  const error = validateParamsCreateProduct(product);
-  if (error) {
-    responseService = { status: 'INVALID_INPUT', data: { message: error } };
-    return responseService;
+async function createProduct(product: ProductInputtableTypes): 
+Promise<ServiceResponse<Omit<Product, 'orderId'>>> {
+  const validateResponse = schemaValidator(createProductSchema, product);
+  if (validateResponse.error) {
+    if (getError(validateResponse.message)) {
+      return { status: 'INVALID_INPUT', data: { message: validateResponse.message } };
+    }
+    return { status: 'BAD_REQUEST', data: { message: validateResponse.message } }; 
   }
 
   const productExist = await OrderModel.findByPk(product.orderId);
-
-  if (productExist) {
-    return { status: 'CONFLICT', data: { message: 'This orderId already registered' } };
+  if (productExist) { 
+    return { status: 'CONFLICT', data: { message: 'orderId already' } };
   }
-  
   const createdProduct = await ProductModel.create({ ...product });
   
-  const id = createdProduct.get('id') as number;
-  const name = createdProduct.get('name') as string;
-  const price = createdProduct.get('price') as string;
-
-  const responseData = { id, name, price };
+  const { id, name, price } = createdProduct.get() as { id: number; name: string; price: string };
   
-  return { status: 'CREATED', data: responseData };
+  return { status: 'CREATED', data: { id, name, price } };
 }
 
 export default {

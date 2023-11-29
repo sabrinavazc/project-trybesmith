@@ -50,7 +50,7 @@ describe('ProductsController', function () {
     const httpResponse = await chai.request(app).post('/products').send(httpRequestBody);
   
     expect(httpResponse.status).to.equal(422);
-    expect(httpResponse.body).to.deep.equal({ message: 'Name is required' });
+    expect(httpResponse.body).to.deep.equal({ message: '\"name\" is required' });
   });
 
   it('should return error when creating a product without a name', async function () {
@@ -62,7 +62,7 @@ describe('ProductsController', function () {
     const httpResponse = await chai.request(app).post('/products').send(httpRequestBody);
 
     expect(httpResponse.status).to.equal(422);
-    expect(httpResponse.body).to.deep.equal({ message: 'Name is required' });
+    expect(httpResponse.body).to.deep.equal({ message: '\"name\" is required' });
   });
   
   it('should return a list of products', async function () {
