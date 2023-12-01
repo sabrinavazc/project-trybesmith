@@ -15,10 +15,18 @@ async function authMiddleware(req: Request, res: Response, next: NextFunction): 
 
   const token = extractToken(authorization);
 
-  const decoded = await jwtUtil.verify(token);
+  const decoded = jwtUtil.verify(token);
+
+  if (!decoded || !decoded.username) {
+    return res.status(401).json({ message: 'Invalid token' });
+  }
+
   const user = await UserModel.findOne({ where: { username: decoded.username } });
-  if (!user) return res.status(401).json({ message: 'Invalid token' }); 
-    
+
+  if (!user) {
+    return res.status(401).json({ message: 'Invalid token' });
+  }
+
   next();
 }
 

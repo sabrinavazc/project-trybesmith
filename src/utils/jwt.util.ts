@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import { TokenPayload } from '../types/TokenPayload';
 
 const secret = process.env.JWT_SECRET || 'supersecret123456';
@@ -13,7 +13,12 @@ function verify(token: string): TokenPayload {
   return data; 
 }
 
+function decodeToken(token: string): string | JwtPayload | null {
+  return jwt.decode(token);
+}
+
 export default {
   sign,
   verify,
+  decodeToken,
 };

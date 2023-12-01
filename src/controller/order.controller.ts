@@ -13,13 +13,9 @@ async function listOrders(_req: Request, res: Response): Promise<Response> {
 }
 
 async function createOrder(req:Request, res: Response): Promise<Response> {
-  const { productIds, userId } = req.body;
+  const { productIds, userId }: { productIds: number[], userId: number } = req.body;
   
-  const serviceResponse = await orderService.createOrder(productIds, userId);
-
-  // if (serviceResponse.status !== 'SUCCESSFUL') {
-  //   return res.status(statusCode(serviceResponse.status)).json(serviceResponse.data);  
-  // }
+  const serviceResponse = await orderService.createOrder(userId, productIds);
 
   return res.status(201).json(serviceResponse.data);
 }
