@@ -32,7 +32,7 @@ async function productValidation(
   }
 
   if (!Array.isArray(productIds)) {
-    return res.status(422).json({ message: '"productIds" must be an array' });
+    return res.status(422).json({ message: '"productIds" must be an array"' });
   }
 
   if (productIds.length <= 0) {
