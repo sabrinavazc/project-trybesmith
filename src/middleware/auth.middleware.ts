@@ -15,19 +15,24 @@ async function authMiddleware(req: Request, res: Response, next: NextFunction): 
 
   const token = extractToken(authorization);
 
-  const decoded = jwtUtil.verify(token);
+  try {
+    const decoded = jwtUtil.verify(token);
 
-  if (!decoded || !decoded.username) {
+    if (!decoded || !decoded.username) {
+      return res.status(401).json({ message: 'Invalid token' });
+    }
+
+    const user = await UserModel.findOne({ where: { username: decoded.username } });
+
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid token' });
+    }
+
+    next();
+  } catch (err) {
     return res.status(401).json({ message: 'Invalid token' });
   }
-
-  const user = await UserModel.findOne({ where: { username: decoded.username } });
-
-  if (!user) {
-    return res.status(401).json({ message: 'Invalid token' });
-  }
-
-  next();
 }
 
 export default authMiddleware;
+
